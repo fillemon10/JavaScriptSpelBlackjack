@@ -5,7 +5,6 @@ const gameBoard = document.querySelector(".game-board");
 const startButton = document.querySelector(".start-button");
 const hitButton = document.querySelector(".hit-button");
 const standButton = document.querySelector(".stand-button");
-
 const countDiv = document.createElement("div");
 var currentPlayer = 1;
 
@@ -77,7 +76,21 @@ function drawHands() {
 //visar händerna i HTML
 function showHands() {
   gameBoard.innerHTML = "";
+  var dealer = true;
   players.forEach((player) => {
+    const playerDiv = document.createElement("div");
+    playerDiv.classList.add("player");
+    const playerID = document.createElement("p");
+    playerID.classList.add("player-id");
+    if (dealer) {
+      playerID.innerText = "Dealer:";
+      dealer = false;
+    } else {
+      playerID.innerText = "Player " + player.ID + ":";
+    }
+
+    playerDiv.appendChild(playerID);
+
     const handDiv = document.createElement("div");
     handDiv.classList.add("hand");
 
@@ -95,8 +108,8 @@ function showHands() {
 
     countHand.innerText = countCards(player.Hand);
     handDiv.appendChild(countHand);
-
-    gameBoard.appendChild(handDiv);
+    playerDiv.appendChild(handDiv);
+    gameBoard.appendChild(playerDiv);
   });
 }
 
@@ -109,7 +122,7 @@ function countCards(hand) {
   for (let index = 0; index < hand.length; index++) {
     //definerar kort
     card = hand[index];
-    
+
     //om det är ett klät kort
     if (card.Number >= 10 && card.Number < 14) {
       count += 10;
@@ -139,7 +152,16 @@ function hit() {
   showHands();
 }
 function stand() {
-  
+  if (currentPlayer == players.length) {
+    currentPlayer = 0;
+    dealersTurn();
+  } else {
+    currentPlayer++;
+  }
+}
+
+function dealersTurn() {
+  console.log(currentPlayer); 
 }
 
 //startar spelet
