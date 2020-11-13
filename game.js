@@ -1,4 +1,4 @@
-//deklarerar variabler
+//VARIABLES
 var deck = [];
 var players = [];
 const gameBoard = document.querySelector(".game-board");
@@ -7,13 +7,23 @@ const hitButton = document.querySelector(".hit-button");
 const standButton = document.querySelector(".stand-button");
 const countDiv = document.createElement("div");
 var currentPlayer = 1;
+var count = 0;
 
-//event listeners
+//EVENT LISTENERS
 startButton.addEventListener("click", startGame);
 hitButton.addEventListener("click", hit);
 standButton.addEventListener("click", stand);
 
-var count = 0;
+//FUNCTIONS
+
+//startar spelet
+function startGame() {
+  createDeck();
+  shuffleDeck();
+  createPlayers(2);
+  drawHands();
+  showHands();
+}
 
 //skapar en kortlek med 52 kort. Kan nog optimeras
 function createDeck() {
@@ -57,7 +67,7 @@ function createPlayers(number) {
     var hand = [];
 
     //skapar spelarens egenskaper
-    var player = { Name: "player " + index, ID: index, Hand: hand };
+    var player = { Name: "player " + index, ID: index, Hand: hand, status: 1 };
 
     //lägger till spelaren
     players[index] = player;
@@ -139,6 +149,8 @@ function countCards(hand) {
         //om det är ett ess
         if (card.Number == 14) {
           count -= 10;
+        } else {
+          bust();
         }
       });
     }
@@ -147,12 +159,16 @@ function countCards(hand) {
   return count;
 }
 
+function bust() {
+  players[currentPlayer].status = 0;
+}
+
 function hit() {
   players[currentPlayer].Hand.push(deck.pop());
   showHands();
 }
 function stand() {
-  if (currentPlayer == players.length) {
+  if (currentPlayer == players.length - 1) {
     currentPlayer = 0;
     dealersTurn();
   } else {
@@ -161,23 +177,16 @@ function stand() {
 }
 
 function dealersTurn() {
-  console.log(currentPlayer); 
-}
-
-//startar spelet
-function startGame() {
-  createDeck();
-  shuffleDeck();
-  createPlayers(2);
-  drawHands();
-  showHands();
-  //debug kod
-  var i = 0;
-  deck.forEach((element) => {
-    i++;
-    console.log(i + " " + element.Number + " " + element.Type);
-  });
-  players.forEach((element) => {
-    console.log(element.Hand);
-  });
+  showCardNo2();
+  if (allPlayersBusted()) {
+    // dealers wins
+  }
+  dealersHand = countCards(players[currentPlayer].Hand);
+  if (dealersHand >= 17 && dealersHand < 21) {
+    //stand
+  } else if (dealersHand < 17) {
+    //hit
+  } else if (dealersHand == 21) {
+    //blackjack
+  }
 }
