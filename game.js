@@ -8,6 +8,7 @@ const standButton = document.querySelector(".stand-button");
 const countDiv = document.createElement("div");
 var currentPlayer = 1;
 var count = 0;
+var first = true;
 
 //EVENT LISTENERS
 startButton.addEventListener("click", startGame);
@@ -67,7 +68,13 @@ function createPlayers(number) {
     var hand = [];
 
     //skapar spelarens egenskaper
-    var player = { Name: "player " + index, ID: index, Hand: hand, status: 1 };
+    var player = {
+      Name: "player " + index,
+      ID: index,
+      Hand: hand,
+      counted: 0,
+      status: 1,
+    };
 
     //lägger till spelaren
     players[index] = player;
@@ -87,6 +94,9 @@ function drawHands() {
 function showHands() {
   gameBoard.innerHTML = "";
   var dealer = true;
+  if (currentPlayer != 0) {
+    first = true;
+  }
   players.forEach((player) => {
     const playerDiv = document.createElement("div");
     playerDiv.classList.add("player");
@@ -105,11 +115,14 @@ function showHands() {
     handDiv.classList.add("hand");
 
     for (let index = 0; index < player.Hand.length; index++) {
-      const cardInHand = document.createElement("p");
-
-      cardInHand.innerText =
-        player.Hand[index].Type + " " + player.Hand[index].Number;
-      cardInHand.classList.add("card");
+      cardInHand = document.createElement("p");
+      if (first) {
+        first = false;
+      } else {
+        cardInHand.innerText =
+          player.Hand[index].Type + " " + player.Hand[index].Number;
+        cardInHand.classList.add("card");
+      }
       handDiv.appendChild(cardInHand);
     }
 
@@ -117,6 +130,9 @@ function showHands() {
     countHand.classList.add("count");
 
     countHand.innerText = countCards(player.Hand);
+    if (countHand.innerText > 21) {
+      bust(player);
+    }
     handDiv.appendChild(countHand);
     playerDiv.appendChild(handDiv);
     gameBoard.appendChild(playerDiv);
@@ -132,43 +148,51 @@ function countCards(hand) {
   for (let index = 0; index < hand.length; index++) {
     //definerar kort
     card = hand[index];
-
     //om det är ett klät kort
     if (card.Number >= 10 && card.Number < 14) {
+      card.counted = 1;
       count += 10;
     } //om det är ett ess
     else if (card.Number == 14) {
+      card.counted = 1;
       count += 11;
     } //om det är längre än 10
     else {
+      card.counted = 1;
       count += card.Number;
     } //om man över stiger 21
     if (count > 21) {
       //för varje kort i handen
       hand.forEach((card) => {
         //om det är ett ess
-        if (card.Number == 14) {
+        if (card.Number == 14 && card.counted == 1) {
+          card.counted = 2;
           count -= 10;
-        } else {
-          bust();
         }
       });
+      if (count > 21) {
+        return count;
+      }
     }
   }
   //returerar antalet
   return count;
 }
 
-function bust() {
-  players[currentPlayer].status = 0;
+function bust(player) {
+  console.log("bust" + player.ID);
+  player.status = 0;
+  stand();
 }
 
 function hit() {
+  //console.log(players[currentPlayer]);
   players[currentPlayer].Hand.push(deck.pop());
   showHands();
 }
 function stand() {
   if (currentPlayer == players.length - 1) {
+    console.log("dealersTurn");
     currentPlayer = 0;
     dealersTurn();
   } else {
@@ -177,16 +201,25 @@ function stand() {
 }
 
 function dealersTurn() {
-  showCardNo2();
+  showHands();
   if (allPlayersBusted()) {
-    // dealers wins
+    console.log("all players busted");
+  } else {
+    dealersHand = countCards(players[currentPlayer].Hand);
+    if (dealersHand >= 17 && dealersHand < 21) {
+    } else if (dealersHand < 17) {
+    } else if (dealersHand == 21) {
+      dealerBJ();
+    }
   }
-  dealersHand = countCards(players[currentPlayer].Hand);
-  if (dealersHand >= 17 && dealersHand < 21) {
-    //stand
-  } else if (dealersHand < 17) {
-    //hit
-  } else if (dealersHand == 21) {
-    //blackjack
-  }
+}
+function allPlayersBusted() {
+  players.forEach((player) => {
+    if (player.ID == 0) {
+      return;
+    }
+    if (player.status != 0) {
+      return true;
+    }
+  });
 }
