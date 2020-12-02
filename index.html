@@ -3,35 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css" />
     <title>Blackjack</title>
   </head>
   <body>
     <div class="game">
       <h3>Blackjack</h3>
       <div class="game-body">
-        <div class="game-board">
-
-        </div>
         <div class="game-options">
-          <label for="cars">Choose number of players:</label>
+          <button class="start-button">Start</button>
+          <button class="hit-button">Hit</button>
+          <button class="stand-button">Stand</button>
+          <label for="players">Choose number of players:</label>
           <select name="players" id="players">
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
             <option value="5">5</option>
-            <option value="7">6</option>
-            <option value="7">7</option>
+            <option value="6">6</option>
           </select>
-          <button class="start-button">Start</button>
-          <button class="hit-button">Hit</button>
-          <button class="stand-button">Stand</button>
-
         </div>
+        <div class="game-board"></div>
       </div>
     </div>
     <script src="game.js"></script>
-
   </body>
 </html>
