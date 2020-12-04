@@ -7,6 +7,7 @@ const hitButton = document.querySelector(".hit-button");
 const standButton = document.querySelector(".stand-button");
 const countDiv = document.createElement("div");
 const playerCount = document.getElementById("players");
+const gameBody = document.querySelector(".game-body");
 var currentPlayer = 1;
 var count = 0;
 var first = true;
@@ -204,12 +205,18 @@ function bust(player) {
   stand();
 }
 function hit() {
+  console.log(currentPlayer);
   players[currentPlayer].Hand.push(deck.pop());
   showHands();
+  if (countCards(players[currentPlayer].Hand) == 21) {
+    stand();
+  }
+  if (currentPlayer == 0 && countCards(players[currentPlayer].Hand) < 17) {
+    hit();
+  }
 }
 function stand() {
   if (currentPlayer == players.length - 1) {
-    console.log("dealersTurn");
     currentPlayer = 0;
     firstRound = false;
     dealersTurn();
@@ -219,17 +226,24 @@ function stand() {
 }
 function dealersTurn() {
   if (allPlayersBusted()) {
-    dealersWins();
+    checkWin();
   } else {
     dealersHand = countCards(players[currentPlayer].Hand);
     showHands();
     if (dealersHand >= 17 && dealersHand < 21) {
+      console.log("i stand");
       stand();
     } else if (dealersHand < 17) {
+      console.log("i hit");
+
       hit();
     } else if (dealersHand == 21) {
-      dealersWins();
+      console.log("i stand, 21");
+
+      stand();
     }
+    console.log("check win");
+    checkWin();
   }
 }
 function allPlayersBusted() {
@@ -247,4 +261,53 @@ function allPlayersBusted() {
     return false;
   }
 }
-function dealersWins() {}
+function checkWin() {
+  var arrayCount = [];
+  players.forEach((player) => {
+    arrayCount.push(countCards(player.Hand));
+  });
+  var first = true;
+  var playerCounter = 0;
+  arrayCount.forEach((playerCount) => {
+    if (first) {
+      first = false;
+      return;
+    }
+    playerCounter++;
+    if (playerCount == arrayCount[0]) {
+      draw(playerCounter);
+    } else if (playerCount < 21 && arrayCount[0] > 21) {
+      playerWin(playerCounter, false);
+    } else if (playerCount == 21 && playerCount[0] != 21) {
+      playerWin(playerCounter, true);
+    } else if (playerCount > arrayCount[0] && playerCount < 21) {
+      playerWin(playerCounter, false);
+    } else {
+      dealersWins(playerCounter);
+    }
+  });
+}
+function dealersWins(player) {
+  const winDiv = document.createElement("div");
+  winDiv.classList.add("win");
+  const winP = document.createElement("p");
+  winP.innerText = "Dealer won against player " + player + "!";
+  winDiv.appendChild(winP);
+  gameBody.appendChild(winDiv);
+}
+function playerWin(player, is21) {
+  const winDiv = document.createElement("div");
+  winDiv.classList.add("win");
+  const winP = document.createElement("p");
+  winP.innerText = "Player " + player + " won!";
+  winDiv.appendChild(winP);
+  gameBody.appendChild(winDiv);
+}
+function draw(player) {
+  const winDiv = document.createElement("div");
+  winDiv.classList.add("win");
+  const winP = document.createElement("p");
+  winP.innerText = "Player " + player + " tied with dealer!";
+  winDiv.appendChild(winP);
+  gameBody.appendChild(winDiv);
+}
