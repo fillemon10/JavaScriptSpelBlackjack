@@ -4,13 +4,18 @@ body {
   margin: 0;
   overflow: hidden;
 }
+ul {
+  list-style-type: none;
+}
+li {
+  float: left;
+}
+.player {
+  display: flex;
+}
+.active {
+  background-color: blue;
+}
 .card {
-  width: 50px;
-  height: 100px;
-  -webkit-box-shadow: 0px 0px 15px -3px rgba(0, 0, 0, 0.71);
-  box-shadow: 0px 0px 15px -3px rgba(0, 0, 0, 0.71);
-  border-radius: 10px;
-  font-size: 50px;
-  padding: 10px;
-  display: inline;
+  scale: 150%;
 }

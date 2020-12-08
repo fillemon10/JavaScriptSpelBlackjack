@@ -39,16 +39,16 @@ function disableButtons() {
 function createDeck() {
   for (let index = 0; index < 52; index++) {
     if (index <= 12) {
-      var card = { Type: "♥", Number: index + 2 };
+      var card = { Type: "hearts", Number: index + 2 };
       deck[index] = card;
     } else if (index <= 25 && index > 12) {
-      var card = { Type: "♦", Number: index - 11 };
+      var card = { Type: "diams", Number: index - 11 };
       deck[index] = card;
     } else if (index <= 38 && index > 25) {
-      var card = { Type: "♣", Number: index - 24 };
+      var card = { Type: "clubs", Number: index - 24 };
       deck[index] = card;
     } else if (index <= 51 && index > 38) {
-      var card = { Type: "♠", Number: index - 37 };
+      var card = { Type: "spades", Number: index - 37 };
       deck[index] = card;
     }
   }
@@ -110,41 +110,56 @@ function showHands() {
       playerID.innerText = "Player " + player.ID + ":";
     }
     playerDiv.appendChild(playerID);
-    const handDiv = document.createElement("div");
-    handDiv.classList.add("hand");
+    const handUl = document.createElement("ul");
+    handUl.classList.add("table");
+    handUl.classList.add("playingCards");
     for (let index = 0; index < player.Hand.length; index++) {
-      cardInHand = document.createElement("p");
+      const cardLi = document.createElement("li");
+      cardInHand = document.createElement("div");
       if (first) {
+        cardInHand.classList.add("back");
         first = false;
       } else {
-        if (player.Hand[index].Number <= 10)
-          cardInHand.innerText =
-            player.Hand[index].Number + player.Hand[index].Type;
-        else {
+        if (player.Hand[index].Number <= 10) {
+          cardSpans(player.Hand[index].Number, player.Hand[index].Type);
+          var rank = "rank-" + player.Hand[index].Number;
+          cardInHand.classList.add(rank);
+          cardInHand.classList.add(player.Hand[index].Type);
+        } else {
+          handUl.classList.add("faceImages");
           if (player.Hand[index].Number == 11) {
-            cardInHand.innerText = "J" + player.Hand[index].Type;
+            cardInHand.classList.add("rank-j");
+            cardInHand.classList.add(player.Hand[index].Type);
+            cardSpans("J", player.Hand[index].Type);
           } else if (player.Hand[index].Number == 12) {
-            cardInHand.innerText = "Q" + player.Hand[index].Type;
+            cardInHand.classList.add("rank-q");
+            cardInHand.classList.add(player.Hand[index].Type);
+            cardSpans("Q", player.Hand[index].Type);
           } else if (player.Hand[index].Number == 13) {
-            cardInHand.innerText = "K" + player.Hand[index].Type;
+            cardInHand.classList.add("rank-k");
+            cardInHand.classList.add(player.Hand[index].Type);
+            cardSpans("K", player.Hand[index].Type);
           } else if (player.Hand[index].Number == 14) {
-            cardInHand.innerText = "A" + player.Hand[index].Type;
+            cardInHand.classList.add("rank-a");
+            cardInHand.classList.add(player.Hand[index].Type);
+            cardSpans("A", player.Hand[index].Type);
           }
         }
-        cardInHand.classList.add("card");
       }
-      handDiv.appendChild(cardInHand);
+      cardInHand.classList.add("card");
+      cardLi.appendChild(cardInHand);
+      handUl.appendChild(cardLi);
     }
     if (firstRound) {
       if (player.ID == 0) {
-        playerDiv.appendChild(handDiv);
+        playerDiv.appendChild(handUl);
         gameBoard.appendChild(playerDiv);
         return;
       } else {
         const countHand = document.createElement("p");
         countHand.classList.add("count");
         countHand.innerText = countCards(player.Hand);
-        handDiv.appendChild(countHand);
+        handUl.appendChild(countHand);
         if (countHand.innerText > 21) {
           bust(player);
         }
@@ -153,12 +168,12 @@ function showHands() {
       const countHand = document.createElement("p");
       countHand.classList.add("count");
       countHand.innerText = countCards(player.Hand);
-      handDiv.appendChild(countHand);
+      handUl.appendChild(countHand);
       if (countHand.innerText > 21) {
         bust(player);
       }
     }
-    playerDiv.appendChild(handDiv);
+    playerDiv.appendChild(handUl);
     gameBoard.appendChild(playerDiv);
   });
 }
@@ -199,6 +214,16 @@ function countCards(hand) {
   }
   //returerar antalet
   return count;
+}
+function cardSpans(rank, suit) {
+  const cardRank = document.createElement("span");
+  const cardSuit = document.createElement("span");
+  cardRank.classList.add("rank");
+  cardRank.innerHTML = rank;
+  cardInHand.appendChild(cardRank);
+  cardSuit.classList.add("suit");
+  cardSuit.innerHTML = "&" + suit + ";";
+  cardInHand.appendChild(cardSuit);
 }
 function bust(player) {
   player.status = 0;
