@@ -12,8 +12,8 @@
 
 .playingCards .card {
   display: inline-block;
-  width: 3.3em;
-  height: 4.6em;
+  width: 3.63em;
+  height: 5.06em;
   border: 1px solid #666;
   border-radius: 0.3em;
   -moz-border-radius: 0.3em;
@@ -394,9 +394,6 @@
   background-image: url(faces/KC.gif);
 }
 
-.playingCards.faceImages .card.joker {
-  background-image: url(faces/joker.gif);
-}
 .playingCards.simpleCards .card.rank-j,
 .playingCards.simpleCards .card.rank-q,
 .playingCards.simpleCards .card.rank-k {
