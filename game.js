@@ -37,19 +37,10 @@ function disableButtons() {
 }
 //skapar en kortlek med 52 kort. Kan nog optimeras
 function createDeck() {
-  for (let index = 0; index < 52; index++) {
-    if (index <= 12) {
-      var card = { Type: "hearts", Number: index + 2 };
-      deck[index] = card;
-    } else if (index <= 25 && index > 12) {
-      var card = { Type: "diams", Number: index - 11 };
-      deck[index] = card;
-    } else if (index <= 38 && index > 25) {
-      var card = { Type: "clubs", Number: index - 24 };
-      deck[index] = card;
-    } else if (index <= 51 && index > 38) {
-      var card = { Type: "spades", Number: index - 37 };
-      deck[index] = card;
+  var suits = ["hearts", "diams", "clubs", "spades"];
+  for (let i = 0; i < 4; i++) {
+    for (let j = 2; j < 15; j++) {
+      deck.push({ Type: suits[i], Number: j });
     }
   }
 }
