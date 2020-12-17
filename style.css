@@ -2,20 +2,36 @@ body {
   width: 100vw;
   height: 100vh;
   margin: 0;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 ul {
   list-style-type: none;
+  margin-bottom: 10px !important;
 }
 li {
   float: left;
 }
+.col-sm {
+  margin: 20px;
+}
+.select-players {
+  width:60px !important;
+}
 .player {
-  display: flex;
+  margin-top: 10px;
 }
-.active {
-  background-color: blue;
+.title {
+  margin-top: 10px;
 }
-.card {
-  scale: 150%;
+.hit-and-stand {
+  margin-top: 10px;
+}
+.console {
+  height: 600px !important;
+}
+.player-id {
+  padding: 10px !important;
+}
+.lead {
+  color: rgb(49, 49, 49) !important;
 }

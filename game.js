@@ -1,6 +1,4 @@
 //VARIABLES
-var deck = [];
-var players = [];
 const gameBoard = document.querySelector(".game-board");
 const startButton = document.querySelector(".start-button");
 const hitButton = document.querySelector(".hit-button");
@@ -8,38 +6,66 @@ const standButton = document.querySelector(".stand-button");
 const countDiv = document.createElement("div");
 const playerCount = document.getElementById("players");
 const gameBody = document.querySelector(".game-body");
+const restartButton = document.querySelector(".restart-button");
+const consoleDiv = document.querySelector(".console");
+const chooseLabel = document.querySelector(".choose-label");
+
+var deck = [];
+var players = [];
 var currentPlayer = 1;
 var count = 0;
 var first = true;
 var firstRound = true;
+var finished = false;
+var logTemp = "";
 
 //EVENT LISTENERS
 startButton.addEventListener("click", startGame);
 hitButton.addEventListener("click", hit);
 standButton.addEventListener("click", stand);
+restartButton.addEventListener("click", restart);
 
 //FUNCTIONS
 //startar spelet
 function startGame() {
-  disableButtons();
-  createDeck();
-  shuffleDeck();
-  var playerCountValue = playerCount.value;
-  playerCountValue++;
-  createPlayers(playerCountValue);
-  drawHands();
-  showHands();
+  consoleLog("Starting game...");
+  setTimeout(function () {
+    //sätter en timeout på koden
+    disableButtons();
+    setTimeout(function () {
+      createDeck();
+      setTimeout(function () {
+        shuffleDeck();
+        var playerCountValue = playerCount.value;
+        playerCountValue++;
+        setTimeout(function () {
+          createPlayers(playerCountValue);
+          setTimeout(function () {
+            drawHands();
+            showHands();
+            consoleLog("It is now player " + currentPlayer + " turn...", true);
+          }, 200);
+        }, 50);
+      }, 100);
+    }, 200);
+  }, 400);
 }
-//gör visa knappar otryckbara
+//gömmer knappar och visar knappar
 function disableButtons() {
-  startButton.setAttribute("disabled", "disabled");
-  playerCount.setAttribute("disabled", "disabled");
+  startButton.setAttribute("hidden", "");
+  playerCount.setAttribute("hidden", "");
+  chooseLabel.setAttribute("hidden", "");
+  hitButton.removeAttribute("hidden");
+  standButton.removeAttribute("hidden");
 }
 //skapar en kortlek med 52 kort. Kan nog optimeras
 function createDeck() {
   var suits = ["hearts", "diams", "clubs", "spades"];
+  //för varje suit/type
   for (let i = 0; i < 4; i++) {
+    //för varje rank/number
     for (let j = 2; j < 15; j++) {
+      //lägger till i decken
       deck.push({ Type: suits[i], Number: j });
     }
   }
@@ -56,13 +82,14 @@ function shuffleDeck() {
     deck[location1] = deck[location2];
     deck[location2] = temp;
   }
+  consoleLog("Shuffling deck...");
 }
 //skapar spelare
 function createPlayers(number) {
   //skapar "number" antal spelare
   for (let index = 0; index < number; index++) {
     var hand = [];
-    //skapar spelarens egenskaper
+    //skapar spelarens egenskaper (kan göras med klass)
     var player = {
       Name: "player " + index,
       ID: index,
@@ -72,45 +99,67 @@ function createPlayers(number) {
     };
     //lägger till spelaren
     players[index] = player;
+    if (index == 0) {
+      consoleLog("Creating dealer...");
+    } else {
+      consoleLog("Creating player " + index + "...");
+    }
   }
 }
 //ger ut kort till varje spelares hand
 function drawHands() {
+  //för varje spelare
   players.forEach((player) => {
     for (let index = 0; index < 2; index++) {
+      //ge 2 kort
       player.Hand[index] = deck.pop();
     }
   });
+  consoleLog("Dealing cards to all players...");
 }
 //visar händerna i HTML
 function showHands() {
+  //resetar gameboard
   gameBoard.innerHTML = "";
+  //först dealer
   var dealer = true;
   if (currentPlayer != 0) {
     first = true;
   }
+  //för varje spelare
   players.forEach((player) => {
+    //skapar div med korten
     const playerDiv = document.createElement("div");
     playerDiv.classList.add("player");
-    const playerID = document.createElement("p");
+    playerDiv.classList.add("card");
+    const playerID = document.createElement("label");
     playerID.classList.add("player-id");
+    playerID.classList.add("card-body");
+    //om det är dealern
     if (dealer) {
       playerID.innerText = "Dealer:";
       dealer = false;
-    } else {
+      playerDiv.classList.add("border-warning");
+    }
+    //om det är spelaren
+    else {
       playerID.innerText = "Player " + player.ID + ":";
+      playerDiv.classList.add("border-primary");
     }
     playerDiv.appendChild(playerID);
     const handUl = document.createElement("ul");
     handUl.classList.add("table");
     handUl.classList.add("playingCards");
+    //skapar korten
     for (let index = 0; index < player.Hand.length; index++) {
       const cardLi = document.createElement("li");
       cardInHand = document.createElement("div");
+      //dealers första kort
       if (first) {
         cardInHand.classList.add("back");
         first = false;
       } else {
+        //alla kort 2-10
         if (player.Hand[index].Number <= 10) {
           cardSpans(player.Hand[index].Number, player.Hand[index].Type);
           var rank = "rank-" + player.Hand[index].Number;
@@ -118,18 +167,22 @@ function showHands() {
           cardInHand.classList.add(player.Hand[index].Type);
         } else {
           handUl.classList.add("faceImages");
+          //knekt
           if (player.Hand[index].Number == 11) {
             cardInHand.classList.add("rank-j");
             cardInHand.classList.add(player.Hand[index].Type);
             cardSpans("J", player.Hand[index].Type);
+            //dam
           } else if (player.Hand[index].Number == 12) {
             cardInHand.classList.add("rank-q");
             cardInHand.classList.add(player.Hand[index].Type);
             cardSpans("Q", player.Hand[index].Type);
+            //kung
           } else if (player.Hand[index].Number == 13) {
             cardInHand.classList.add("rank-k");
             cardInHand.classList.add(player.Hand[index].Type);
             cardSpans("K", player.Hand[index].Type);
+            //ess
           } else if (player.Hand[index].Number == 14) {
             cardInHand.classList.add("rank-a");
             cardInHand.classList.add(player.Hand[index].Type);
@@ -137,32 +190,36 @@ function showHands() {
           }
         }
       }
-      cardInHand.classList.add("card");
+      cardInHand.classList.add("cards");
       cardLi.appendChild(cardInHand);
       handUl.appendChild(cardLi);
     }
+    //om det är första rundan
     if (firstRound) {
+      //räkna inte dealerns hand
       if (player.ID == 0) {
         playerDiv.appendChild(handUl);
         gameBoard.appendChild(playerDiv);
         return;
       } else {
-        const countHand = document.createElement("p");
+        const countHand = document.createElement("label");
         countHand.classList.add("count");
+        countHand.classList.add("card-text");
+        //räkna spelarens hand
         countHand.innerText = countCards(player.Hand);
         handUl.appendChild(countHand);
         if (countHand.innerText > 21) {
           bust(player);
         }
       }
+      //om det inte är första rudan, visa allas händer
     } else {
-      const countHand = document.createElement("p");
+      const countHand = document.createElement("label");
       countHand.classList.add("count");
+      countHand.classList.add("card-text");
+
       countHand.innerText = countCards(player.Hand);
       handUl.appendChild(countHand);
-      if (countHand.innerText > 21) {
-        bust(player);
-      }
     }
     playerDiv.appendChild(handUl);
     gameBoard.appendChild(playerDiv);
@@ -206,6 +263,7 @@ function countCards(hand) {
   //returerar antalet
   return count;
 }
+//skapar kortens span element
 function cardSpans(rank, suit) {
   const cardRank = document.createElement("span");
   const cardSuit = document.createElement("span");
@@ -216,59 +274,130 @@ function cardSpans(rank, suit) {
   cardSuit.innerHTML = "&" + suit + ";";
   cardInHand.appendChild(cardSuit);
 }
+//om spelaren går över 21
 function bust(player) {
-  player.status = 0;
-  stand();
-}
-function hit() {
-  console.log(currentPlayer);
-  players[currentPlayer].Hand.push(deck.pop());
-  showHands();
-  if (countCards(players[currentPlayer].Hand) == 21) {
+  //kollar om spelet inte är färdigt
+  if (!finished) {
+    //änder spelaren status till 0(busted)
+    player.status = 0;
+    //om det är dealern
+    if (currentPlayer == 0) {
+      consoleLog("The dealer busted...");
+    } else {
+      //om det är en spelare
+      consoleLog("Player " + currentPlayer + " busted...");
+    }
     stand();
   }
-  if (currentPlayer == 0 && countCards(players[currentPlayer].Hand) < 17) {
-    hit();
+}
+//om man trycker på hit, ge ett kort
+function hit() {
+  //kollar om spelet inte är färdigt
+  if (!finished) {
+    //om det är dealern
+    if (currentPlayer == 0) {
+      consoleLog("The dealer hit...");
+    } else {
+      //om det är spelaren
+      consoleLog("Player " + currentPlayer + " hit...");
+    }
+    //ge är kort till spelaren
+    players[currentPlayer].Hand.push(deck.pop());
+    showHands();
+    // om dealern ska hit igen
+    if (
+      currentPlayer == 0 &&
+      countCards(players[currentPlayer].Hand) < 17 &&
+      !allPlayersBusted()
+    ) {
+      setTimeout(function () {
+        hit();
+      }, 1000);
+    }
+    //kolla om spelaren har busted, över 21
+    if (countCards(players[currentPlayer].Hand) > 21) {
+      bust(players[currentPlayer]);
+      //om det är dealern
+      if (currentPlayer == 0) {
+        checkWin();
+      }
+    }
   }
 }
+//om spelaren trycker på stand, stå kvar
 function stand() {
-  if (currentPlayer == players.length - 1) {
-    currentPlayer = 0;
-    firstRound = false;
-    dealersTurn();
-  } else {
-    currentPlayer++;
+  //kollar om spelet inte är färdigt
+  if (!finished) {
+    //om det är dealern och dealern inte är busted
+    if (currentPlayer == 0 && players[currentPlayer].status != 0) {
+      consoleLog("The dealer stand...");
+    }
+    //om spelaren inte är busted
+    else if (players[currentPlayer].status != 0) {
+      consoleLog("Player " + currentPlayer + " stand...");
+    } else {
+      if (allPlayersBusted()) {
+        checkWin();
+      }
+    }
+    //om det är dealerns tur
+    if (currentPlayer == players.length - 1) {
+      setTimeout(() => {
+        currentPlayer = 0;
+        firstRound = false;
+        if (!allPlayersBusted()) {
+          consoleLog("It is now the dealers turn...", true);
+          dealersTurn();
+        }
+      }, 300);
+    } else if (currentPlayer > 0) {
+      //nästa spelares tur
+      currentPlayer++;
+      consoleLog("It is now player " + currentPlayer + " turn...", true);
+    }
   }
 }
 function dealersTurn() {
-  if (allPlayersBusted()) {
-    checkWin();
-  } else {
-    dealersHand = countCards(players[currentPlayer].Hand);
-    showHands();
-    if (dealersHand >= 17 && dealersHand < 21) {
-      console.log("i stand");
-      stand();
-    } else if (dealersHand < 17) {
-      console.log("i hit");
-
-      hit();
-    } else if (dealersHand == 21) {
-      console.log("i stand, 21");
-
-      stand();
+  //kollar om spelet inte är färdigt
+  if (!finished) {
+    if (allPlayersBusted()) {
+    } else {
+      //räkna handen
+      dealersHand = countCards(players[currentPlayer].Hand);
+      showHands();
+      //om dealern är mellan 17-21
+      if (dealersHand >= 17 && dealersHand < 21) {
+        setTimeout(() => {
+          stand();
+          checkWin();
+        }, 500);
+      }
+      //om dealern är under 17
+      else if (dealersHand < 17) {
+        setTimeout(function () {
+          hit();
+        }, 1000);
+      }
+      //om dealern fick 21
+      else if (dealersHand == 21) {
+        stand();
+        checkWin();
+      }
     }
-    console.log("check win");
-    checkWin();
   }
 }
+//kolla om alla spelare busted
 function allPlayersBusted() {
   var bustedList = [];
+  //för varje spelare
   players.forEach((player) => {
+    //om dom har bustat
     if (player.status == 0) {
+      //lägg till i busted listan
       bustedList.push(player);
     }
   });
+  //om busted listan är lika stor som antalet spelare
   if (bustedList.length == players.length - 1) {
     bustedList = [];
     return true;
@@ -277,53 +406,89 @@ function allPlayersBusted() {
     return false;
   }
 }
+//kolla vilka som vinner
 function checkWin() {
-  var arrayCount = [];
+  var countList = [];
+  //för varje spelare
   players.forEach((player) => {
-    arrayCount.push(countCards(player.Hand));
+    //lägg till i listan spelarens poäng
+    countList.push(countCards(player.Hand));
   });
   var first = true;
   var playerCounter = 0;
-  arrayCount.forEach((playerCount) => {
+  countList.forEach((playerCount) => {
+    //skippa dealern
     if (first) {
       first = false;
       return;
     }
     playerCounter++;
-    if (playerCount == arrayCount[0]) {
+    //om spelaren och dealern har samma poäng
+    if (playerCount == countList[0]) {
       draw(playerCounter);
-    } else if (playerCount < 21 && arrayCount[0] > 21) {
+    }
+    //om spelaren är under 21 och dealern busted
+    else if (playerCount < 21 && countList[0] > 21) {
       playerWin(playerCounter, false);
-    } else if (playerCount == 21 && playerCount[0] != 21) {
+    }
+    //om spelaren fick 21 och dealern inte fick 21
+    else if (playerCount == 21 && playerCount[0] != 21) {
       playerWin(playerCounter, true);
-    } else if (playerCount > arrayCount[0] && playerCount < 21) {
+    }
+    //om spelaren fick högre än dealern och är under 21
+    else if (playerCount > countList[0] && playerCount < 21) {
       playerWin(playerCounter, false);
-    } else {
+    }
+    //annars vinner dealern
+    else {
       dealersWins(playerCounter);
     }
   });
 }
+//om dealern vann
 function dealersWins(player) {
-  const winDiv = document.createElement("div");
-  winDiv.classList.add("win");
-  const winP = document.createElement("p");
-  winP.innerText = "Dealer won against player " + player + "!";
-  winDiv.appendChild(winP);
-  gameBody.appendChild(winDiv);
+  if (player != 0) {
+    consoleLog("Dealer won against player " + player + "!", true);
+  }
+  hideShowButtons();
 }
-function playerWin(player, is21) {
-  const winDiv = document.createElement("div");
-  winDiv.classList.add("win");
-  const winP = document.createElement("p");
-  winP.innerText = "Player " + player + " won!";
-  winDiv.appendChild(winP);
-  gameBody.appendChild(winDiv);
+//om spelaren vann
+function playerWin(player) {
+  consoleLog("Player " + player + " won against the dealer!", true);
+  hideShowButtons();
 }
+//om det blev lika
 function draw(player) {
-  const winDiv = document.createElement("div");
-  winDiv.classList.add("win");
-  const winP = document.createElement("p");
-  winP.innerText = "Player " + player + " tied with dealer!";
-  winDiv.appendChild(winP);
-  gameBody.appendChild(winDiv);
+  consoleLog("Player " + player + " tied with dealer!", true);
+  hideShowButtons();
+}
+//gömmer och visar knappar
+function hideShowButtons() {
+  restartButton.removeAttribute("hidden");
+  hitButton.setAttribute("hidden", "");
+  standButton.setAttribute("hidden", "");
+  finished = true;
+}
+//om man trycker restart knappen
+function restart() {
+  //reloada spelet
+  window.location.reload(false);
+}
+//gör ett konsol inlägg
+function consoleLog(log, bold) {
+  //om loggen inte är samma som förra eller om loggen är hit
+  if (logTemp != log || log == "Player " + currentPlayer + " hit...") {
+    //skapar elementet
+    const logOption = document.createElement("option");
+    //loggar i HTML
+    logOption.innerHTML = log;
+    //om bold är true
+    if (bold) {
+      //gör texten bold
+      logOption.classList.add("font-weight-bold");
+    }
+    consoleDiv.appendChild(logOption);
+    //sparar loggen
+    logTemp = log;
+  }
 }
