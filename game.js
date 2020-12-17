@@ -9,7 +9,7 @@ const gameBody = document.querySelector(".game-body");
 const restartButton = document.querySelector(".restart-button");
 const consoleDiv = document.querySelector(".console");
 const chooseLabel = document.querySelector(".choose-label");
-
+// bg-primary
 var deck = [];
 var players = [];
 var currentPlayer = 1;
@@ -18,6 +18,7 @@ var first = true;
 var firstRound = true;
 var finished = false;
 var logTemp = "";
+var alreadyExecuted = false;
 
 //EVENT LISTENERS
 startButton.addEventListener("click", startGame);
@@ -278,16 +279,20 @@ function cardSpans(rank, suit) {
 function bust(player) {
   //kollar om spelet inte är färdigt
   if (!finished) {
-    //änder spelaren status till 0(busted)
-    player.status = 0;
-    //om det är dealern
-    if (currentPlayer == 0) {
-      consoleLog("The dealer busted...");
-    } else {
-      //om det är en spelare
-      consoleLog("Player " + currentPlayer + " busted...");
+    if (countCards(players[currentPlayer].Hand) > 21) {
+      //änder spelaren status till 0(busted)
+      player.status = 0;
+      //om det är dealern
+      if (currentPlayer == 0) {
+        consoleLog("The dealer busted...");
+        checkWin();
+        return;
+      } else {
+        //om det är en spelare
+        consoleLog("Player " + currentPlayer + " busted...");
+      }
+      stand();
     }
-    stand();
   }
 }
 //om man trycker på hit, ge ett kort
@@ -318,9 +323,6 @@ function hit() {
     if (countCards(players[currentPlayer].Hand) > 21) {
       bust(players[currentPlayer]);
       //om det är dealern
-      if (currentPlayer == 0) {
-        checkWin();
-      }
     }
   }
 }
@@ -382,6 +384,8 @@ function dealersTurn() {
       else if (dealersHand == 21) {
         stand();
         checkWin();
+      } else {
+        bust(0);
       }
     }
   }
@@ -408,42 +412,46 @@ function allPlayersBusted() {
 }
 //kolla vilka som vinner
 function checkWin() {
-  var countList = [];
-  //för varje spelare
-  players.forEach((player) => {
-    //lägg till i listan spelarens poäng
-    countList.push(countCards(player.Hand));
-  });
-  var first = true;
-  var playerCounter = 0;
-  countList.forEach((playerCount) => {
-    //skippa dealern
-    if (first) {
-      first = false;
-      return;
-    }
-    playerCounter++;
-    //om spelaren och dealern har samma poäng
-    if (playerCount == countList[0]) {
-      draw(playerCounter);
-    }
-    //om spelaren är under 21 och dealern busted
-    else if (playerCount < 21 && countList[0] > 21) {
-      playerWin(playerCounter, false);
-    }
-    //om spelaren fick 21 och dealern inte fick 21
-    else if (playerCount == 21 && playerCount[0] != 21) {
-      playerWin(playerCounter, true);
-    }
-    //om spelaren fick högre än dealern och är under 21
-    else if (playerCount > countList[0] && playerCount < 21) {
-      playerWin(playerCounter, false);
-    }
-    //annars vinner dealern
-    else {
-      dealersWins(playerCounter);
-    }
-  });
+  if (!alreadyExecuted) {
+    alreadyExecuted = true;
+    var countList = [];
+    //för varje spelare
+    players.forEach((player) => {
+      //lägg till i listan spelarens poäng
+      countList.push(countCards(player.Hand));
+    });
+    console.log(countList);
+    var first = true;
+    var playerCounter = 0;
+    countList.forEach((playerCount) => {
+      //skippa dealern
+      if (first) {
+        first = false;
+        return;
+      }
+      playerCounter++;
+      //om spelaren och dealern har samma poäng
+      if (playerCount == countList[0]) {
+        draw(playerCounter);
+      }
+      //om spelaren är under 21 och dealern busted
+      else if (playerCount < 21 && countList[0] > 21) {
+        playerWin(playerCounter, false);
+      }
+      //om spelaren fick 21 och dealern inte fick 21
+      else if (playerCount == 21 && playerCount[0] != 21) {
+        playerWin(playerCounter, true);
+      }
+      //om spelaren fick högre än dealern och är under 21
+      else if (playerCount > countList[0] && playerCount < 21) {
+        playerWin(playerCounter, false);
+      }
+      //annars vinner dealern
+      else {
+        dealersWins(playerCounter);
+      }
+    });
+  }
 }
 //om dealern vann
 function dealersWins(player) {

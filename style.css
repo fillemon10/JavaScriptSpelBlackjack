@@ -2,7 +2,7 @@ body {
   width: 100vw;
   height: 100vh;
   margin: 0;
-  overflow-x: hidden;
+  
 }
 ul {
   list-style-type: none;
@@ -12,26 +12,28 @@ li {
   float: left;
 }
 .col-sm {
-  margin: 20px;
+  margin: 1vw;
 }
 .select-players {
-  width:60px !important;
+  width:70px !important;
 }
 .player {
-  margin-top: 10px;
-}
-.title {
   margin-top: 10px;
 }
 .hit-and-stand {
   margin-top: 10px;
 }
 .console {
-  height: 600px !important;
+  height: 82vh !important;
 }
 .player-id {
   padding: 10px !important;
 }
 .lead {
   color: rgb(49, 49, 49) !important;
+}
+.row {
+  width: 100vw;
+  margin: 0 !important;
+  height: 100vh;
 }
