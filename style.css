@@ -2,7 +2,7 @@ body {
   width: 100vw;
   height: 100vh;
   margin: 0;
-  
+  overflow-x: hidden;
 }
 ul {
   list-style-type: none;
@@ -12,7 +12,7 @@ li {
   float: left;
 }
 .col-sm {
-  margin: 1vw;
+  margin: 0.7vw;
 }
 .select-players {
   width:70px !important;
@@ -28,6 +28,7 @@ li {
 }
 .player-id {
   padding: 10px !important;
+  margin-bottom: 10px !important;
 }
 .lead {
   color: rgb(49, 49, 49) !important;
