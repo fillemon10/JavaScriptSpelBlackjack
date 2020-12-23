@@ -95,7 +95,7 @@ function createPlayers(number) {
       ID: index,
       Hand: hand,
       counted: 0,
-      status: 1,
+      status: 1,  
     };
     //lägger till spelaren
     players[index] = player;
