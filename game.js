@@ -95,15 +95,10 @@ function createPlayers(number) {
       ID: index,
       Hand: hand,
       counted: 0,
-      status: 1,  
+      status: 1,
     };
     //lägger till spelaren
     players[index] = player;
-    if (index == 0) {
-      consoleLog('Creating dealer...');
-    } else {
-      consoleLog('Creating player ' + index + '...');
-    }
   }
 }
 //ger ut kort till varje spelares hand
@@ -142,12 +137,12 @@ function showHands() {
     playerID.classList.add('card-body');
     //om det är dealern
     if (dealer) {
-      playerID.innerText = 'Dealer:';
+      playerID.innerText = 'Dealer: ';
       dealer = false;
     }
     //om det är spelaren
     else {
-      playerID.innerText = 'Player ' + player.ID + ':';
+      playerID.innerText = 'Player ' + player.ID + ': ';
     }
     playerDiv.appendChild(playerID);
     const handUl = document.createElement('ul');
@@ -208,12 +203,11 @@ function showHands() {
         const countHand = document.createElement('label');
         countHand.classList.add('count');
         countHand.classList.add('badge');
-        countHand.classList.add('badge-danger');
-        countHand.classList.add('badge-pill');
+        countHand.classList.add('bg-danger');
         countHand.classList.add('card-text');
         //räkna spelarens hand
         countHand.innerText = countCards(player.Hand);
-        handUl.appendChild(countHand);
+        playerID.appendChild(countHand);
       }
       //om det inte är första rudan, visa allas händer
     } else {
@@ -221,10 +215,10 @@ function showHands() {
       countHand.classList.add('count');
       countHand.classList.add('card-text');
       countHand.classList.add('badge');
-      countHand.classList.add('badge-danger');
-      countHand.classList.add('badge-pill');
+      countHand.classList.add('bg-danger');
+      countHand.classList.add('card-text');
       countHand.innerText = countCards(player.Hand);
-      handUl.appendChild(countHand);
+      playerID.appendChild(countHand);
     }
     playerDiv.appendChild(handUl);
     gameBoard.appendChild(playerDiv);
@@ -433,12 +427,9 @@ function checkWin() {
         return;
       }
       playerCounter++;
-      //om spelaren och dealern har samma poäng
-      if (playerCount == countList[0]) {
-        draw(playerCounter);
-      }
+
       //om spelaren är under 21 och dealern busted
-      else if (playerCount < 21 && countList[0] > 21) {
+      if (playerCount < 21 && countList[0] > 21) {
         playerWin(playerCounter, false);
       }
       //om spelaren fick 21 och dealern inte fick 21
@@ -448,6 +439,10 @@ function checkWin() {
       //om spelaren fick högre än dealern och är under 21
       else if (playerCount > countList[0] && playerCount < 21) {
         playerWin(playerCounter, false);
+      }
+      //om spelaren och dealern har samma poäng
+      else if (playerCount == countList[0]) {
+        draw(playerCounter);
       }
       //annars vinner dealern
       else {
@@ -490,15 +485,15 @@ function consoleLog(log, bold) {
   //om loggen inte är samma som förra eller om loggen är hit
   if (logTemp != log || log == 'Player ' + currentPlayer + ' hit...') {
     //skapar elementet
-    const logOption = document.createElement('option');
+    const logLi = document.createElement('li');
     //loggar i HTML
-    logOption.innerHTML = log;
+    logLi.innerHTML = log;
     //om bold är true
     if (bold) {
       //gör texten bold
-      logOption.classList.add('font-weight-bold');
+      logLi.classList.add('fw-bold');
     }
-    consoleDiv.appendChild(logOption);
+    consoleDiv.appendChild(logLi);
     //sparar loggen
     logTemp = log;
   }

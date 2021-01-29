@@ -19,12 +19,20 @@ li {
 }
 .player {
   margin-top: 10px;
+  min-width: 100px;
 }
 .hit-and-stand {
   margin-top: 10px;
 }
 .console {
-  height: 82vh !important;
+  min-height: 82vh !important;
+  padding-left: 0;
+}
+.console li {
+  padding-left: 10px;
+}
+.console li:nth-child(even) {
+  background-color: rgb(240, 240, 240);
 }
 .player-id {
   padding: 10px !important;
