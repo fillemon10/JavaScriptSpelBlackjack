@@ -332,7 +332,7 @@ function stand() {
     }
     //om spelaren inte är busted
     else if (players[currentPlayer].status != 0) {
-      consoleLog('Player ' + currentPlayer + ' stand...');
+      consoleLog('Player ' + currentPlayer + ' stands...');
     } else {
       if (allPlayersBusted()) {
         checkWin();
