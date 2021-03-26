@@ -43,10 +43,13 @@ function startGame() {
           setTimeout(function () {
             drawHands();
             showHands();
-            consoleLog('It is now player ' + currentPlayer + ' turn...', true);
-          }, 200);
-        }, 50);
-      }, 100);
+            setTimeout(function () {
+
+              consoleLog('It is now player ' + currentPlayer + ' turn...', true);
+            }, 300);
+          }, 300);
+        }, 500);
+      }, 300);
     }, 200);
   }, 400);
 }
@@ -96,6 +99,7 @@ function createPlayers(number) {
       Hand: hand,
       counted: 0,
       status: 1,
+      money: 1000
     };
     //lägger till spelaren
     players[index] = player;
@@ -254,9 +258,6 @@ function countCards(hand) {
           count -= 10;
         }
       });
-      if (count > 21) {
-        return count;
-      }
     }
   }
   //returerar antalet
@@ -328,11 +329,15 @@ function stand() {
   if (!finished) {
     //om det är dealern och dealern inte är busted
     if (currentPlayer == 0 && players[currentPlayer].status != 0) {
+
       consoleLog('The dealer stand...');
     }
     //om spelaren inte är busted
     else if (players[currentPlayer].status != 0) {
-      consoleLog('Player ' + currentPlayer + ' stands...');
+      setTimeout(function () {
+
+        consoleLog('Player ' + currentPlayer + ' stands...');
+      }, 300);
     } else {
       if (allPlayersBusted()) {
         checkWin();
@@ -344,6 +349,7 @@ function stand() {
         currentPlayer = 0;
         firstRound = false;
         if (!allPlayersBusted()) {
+
           consoleLog('It is now the dealers turn...', true);
           dealersTurn();
         }
@@ -496,5 +502,21 @@ function consoleLog(log, bold) {
     consoleDiv.appendChild(logLi);
     //sparar loggen
     logTemp = log;
+    tone = new sound("tone.mp3");
+    tone.play();
+  }
+}
+function sound(src) {
+  this.sound = document.createElement("audio");
+  this.sound.src = src;
+  this.sound.setAttribute("preload", "auto");
+  this.sound.setAttribute("controls", "none");
+  this.sound.style.display = "none";
+  document.body.appendChild(this.sound);
+  this.play = function () {
+    this.sound.play();
+  }
+  this.stop = function () {
+    this.sound.pause();
   }
 }
