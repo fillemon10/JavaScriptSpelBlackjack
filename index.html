@@ -17,37 +17,125 @@
   </head>
   <body>
     <div class="game container-fuild">
-      <div class="row p-sm-2">
-        <div class="col-sm card bg-light">
-          <div class="game-body card-body">
-            <h1 class="title card-title">Blackjack</h1>
-            <p class="lead">A Basic Modern Blackjack Simulator</p>
-            <div class="game-options">
-              <button class="restart-button btn btn-danger" hidden>Restart</button>
-              <div class="form-group">
-                <button class="start-button btn btn-success">Start</button>
-                <label class="choose-label" for="players">Choose number of players:</label>
-                <select class="custom-select select-players" name="players" id="players">
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                  <option value="6">6</option>
-                </select>
-              </div>
-              <div class="hit-and-stand">
-                <button class="hit-button btn btn-primary" hidden>Hit</button>
-                <button class="stand-button btn btn-secondary" hidden>Stand</button>
-              </div>
+      <div class="row gx-3 p-2">
+        <div class="col-2">
+          <div class="card bg-light">
+            <div class="card-body">
+              <h1 class="card-title">Game Log</h1>
+              <ul class="console card"></ul>
             </div>
-            <div class="game-board"></div>
           </div>
         </div>
-        <div class="col-sm card bg-light">
-          <div class="card-body">
-            <h1 class="card-title">Game Log</h1>
-            <ul class="console card"></ul>
+        <div class="col-7">
+          <div class="card bg-light">
+            <div class="game-body card-body">
+              <h1 class="title card-title">Blackjack</h1>
+              <p class="lead">A Basic Modern Blackjack Simulator</p>
+              <div class="game-options">
+                <button class="restart-button btn btn-danger" hidden>
+                  Restart
+                </button>
+                <div class="form-group">
+                  <button class="start-button btn btn-success">Start</button>
+                  <label class="choose-label" for="players"
+                    >Choose number of players:</label
+                  >
+                  <select
+                    class="custom-select select-players"
+                    name="players"
+                    id="players"
+                  >
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                  </select>
+                </div>
+                <div class="hit-and-stand">
+                  <button class="hit-button btn btn-primary" hidden>Hit</button>
+                  <button class="stand-button btn btn-secondary" hidden>
+                    Stand
+                  </button>
+                </div>
+              </div>
+              <div class="game-board"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="card bg-light">
+            <div class="game-body card-body">
+              <h1 class="title card-title">About</h1>
+              <p>Welcome to the best and most simple Blackjack Simulator!</p>
+              <p>
+                It is made by pure vanilla JavaScript, CSS and HTML. Also made
+                scrath. No imported libraries, only the design for the
+                <a href="https://selfthinker.github.io/CSS-Playing-Cards/"
+                  >beautiful cards</a
+                >.
+              </p>
+              <p>By Filip Sjölander TE18IM 2021</p>
+              <h3>Background Music</h3>
+              <audio controls loop autoplay>
+                <source src="background.mp3" type="audio/mpeg" />
+                Your browser does not support the audio element.
+              </audio>
+              <h3>Basic Blackjack Rules</h3>
+              <ul class="rules">
+                <li>
+                  The goal of blackjack is to beat the dealer's hand without
+                  going over 21.
+                </li>
+                <li>
+                  Face cards are worth 10. Aces are worth 1 or 11, whichever
+                  makes a better hand.
+                </li>
+                <li>
+                  Each player starts with two cards, one of the dealer's cards
+                  is hidden until the end.
+                </li>
+                <li>
+                  To 'Hit' is to ask for another card. To 'Stand' is to hold
+                  your total and end your turn.
+                </li>
+                <li>
+                  If you go over 21 you bust, and the dealer wins regardless of
+                  the dealer's hand.
+                </li>
+                <li>
+                  If you are dealt 21 from the start (Ace &amp; 10), you got a
+                  blackjack.
+                </li>
+                <li>
+                  Blackjack usually means you win 1.5 the amount of your bet.
+                  Depends on the casino.
+                </li>
+                <li>Dealer will hit until his/her cards total 17 or higher.</li>
+                <li>
+                  Doubling is like a hit, only the bet is doubled and you only
+                  get one more card.
+                </li>
+                <li>
+                  Split can be done when you have two of the same card - the
+                  pair is split into two hands.
+                </li>
+                <li>
+                  Splitting also doubles the bet, because each new hand is worth
+                  the original bet.
+                </li>
+                <li>
+                  You can only double/split on the first move, or first move of
+                  a hand created by a split.
+                </li>
+                <li>You cannot play on two aces after they are split.</li>
+                <li>
+                  You can double on a hand resulting from a split, tripling or
+                  quadrupling you bet.
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
