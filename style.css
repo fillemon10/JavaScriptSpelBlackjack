@@ -27,9 +27,11 @@ li {
 .console {
   min-height: 82vh !important;
   padding-left: 0;
+  padding: 0 !important;
 }
 .console li {
   padding-left: 10px;
+  font-size: 1.2rem;
 }
 .console li:nth-child(even) {
   background-color: rgb(240, 240, 240);
@@ -55,4 +57,10 @@ p {
 }
 .rules li {
   font-size: 0.9rem;
+}
+label {
+  font-size:1.2rem ;
+}
+.badge {
+  font-size:1.25rem !important;
 }

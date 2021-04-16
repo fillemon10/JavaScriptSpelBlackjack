@@ -18,7 +18,7 @@
   <body>
     <div class="game container-fuild">
       <div class="row gx-3 p-2">
-        <div class="col-2">
+        <div class="col-3">
           <div class="card bg-light">
             <div class="card-body">
               <h1 class="card-title">Game Log</h1>
@@ -26,17 +26,17 @@
             </div>
           </div>
         </div>
-        <div class="col-7">
+        <div class="col-6">
           <div class="card bg-light">
             <div class="game-body card-body">
               <h1 class="title card-title">Blackjack</h1>
               <p class="lead">A Basic Modern Blackjack Simulator</p>
               <div class="game-options">
-                <button class="restart-button btn btn-danger" hidden>
+                <button class="restart-button btn btn-danger btn-lg" hidden>
                   Restart
                 </button>
                 <div class="form-group">
-                  <button class="start-button btn btn-success">Start</button>
+                  <button class="start-button btn btn-success btn-lg">Start</button>
                   <label class="choose-label" for="players"
                     >Choose number of players:</label
                   >
@@ -54,8 +54,8 @@
                   </select>
                 </div>
                 <div class="hit-and-stand">
-                  <button class="hit-button btn btn-primary" hidden>Hit</button>
-                  <button class="stand-button btn btn-secondary" hidden>
+                  <button class="hit-button btn btn-primary btn-lg" hidden>Hit</button>
+                  <button class="stand-button btn btn-secondary btn-lg" hidden>
                     Stand
                   </button>
                 </div>
@@ -72,7 +72,7 @@
               <p>
                 It is made by pure vanilla JavaScript, CSS and HTML. Also made
                 scrath. No imported libraries, only the design for the
-                <a href="https://selfthinker.github.io/CSS-Playing-Cards/"
+                <a href="https://selfthinker.github.io/CSS-Playing-Cards/" target="_blank"
                   >beautiful cards</a
                 >.
               </p>
@@ -82,6 +82,7 @@
                 <source src="background.mp3" type="audio/mpeg" />
                 Your browser does not support the audio element.
               </audio>
+              <p>Mute the tab to permanently mute the game</p>
               <h3>Basic Blackjack Rules</h3>
               <ul class="rules">
                 <li>
@@ -113,27 +114,6 @@
                   Depends on the casino.
                 </li>
                 <li>Dealer will hit until his/her cards total 17 or higher.</li>
-                <li>
-                  Doubling is like a hit, only the bet is doubled and you only
-                  get one more card.
-                </li>
-                <li>
-                  Split can be done when you have two of the same card - the
-                  pair is split into two hands.
-                </li>
-                <li>
-                  Splitting also doubles the bet, because each new hand is worth
-                  the original bet.
-                </li>
-                <li>
-                  You can only double/split on the first move, or first move of
-                  a hand created by a split.
-                </li>
-                <li>You cannot play on two aces after they are split.</li>
-                <li>
-                  You can double on a hand resulting from a split, tripling or
-                  quadrupling you bet.
-                </li>
               </ul>
             </div>
           </div>
