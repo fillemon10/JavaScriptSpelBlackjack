@@ -47,7 +47,7 @@ function startGame() {
           createPlayers(playerCountValue);
           setTimeout(function () {
             drawHands();
-            showButtons();
+            showHitNStand();
             showHands();
             setTimeout(function () {
               consoleLog('It is now player ' + currentPlayer + ' turn...', true);
@@ -66,10 +66,19 @@ function disableButtons() {
   chooseLabel.setAttribute('hidden', '');
 }
 //visar knappar
-function showButtons() {
+function showHitNStand() {
   //visar hit och stand knappen
+  console.log("showing");
+
   hitButton.removeAttribute('hidden');
   standButton.removeAttribute('hidden');
+}
+//gömmer knappar
+function hideHitNStand() {
+  //gömmer hit and stand knappen
+  console.log("hiding");
+  hitButton.setAttribute('hidden', '');
+  standButton.setAttribute('hidden', '');
 }
 //skapar en kortlek med 52 kort.
 function createDeck() {
@@ -292,8 +301,8 @@ function bust(player) {
   //kollar om spelet inte är färdigt
   if (!finished) {
     if (countCards(players[currentPlayer].Hand) > 21) {
+      hideHitNStand();
       setTimeout(function () {
-
         //änder spelaren status till 0(busted)
         player.status = 0;
         //om det är dealern
@@ -315,6 +324,7 @@ function hit() {
   //kollar om spelet inte är färdigt
   if (!finished) {
     //om det är dealern
+    hideHitNStand();
     if (currentPlayer == 0) {
       consoleLog('The dealer hit...');
     } else {
@@ -336,14 +346,19 @@ function hit() {
       bust(players[currentPlayer]);
       //om det är dealern
     }
+    if (currentPlayer != 0) {
+      setTimeout(() => {
+        showHitNStand();
+      }, 500);
+    }
   }
 }
 //om spelaren trycker på stand, stå kvar
 function stand() {
   //kollar om spelet inte är färdigt
   if (!finished) {
+    hideHitNStand();
     setTimeout(function () {
-
       //om det är dealern och dealern inte är busted
       if (currentPlayer == 0 && players[currentPlayer].status != 0) {
 
@@ -379,12 +394,19 @@ function stand() {
         }, 1000);
       }
       showHands();
-    }, 300);
+    }, 500);
+    if (currentPlayer == 0 || currentPlayer == players.length - 1) {  
+    } else {
+      setTimeout(() => {
+        showHitNStand();
+      }, 500);
+    }
   }
 }
 function dealersTurn() {
   //kollar om spelet inte är färdigt
   if (!finished) {
+    hideHitNStand();
     if (allPlayersBusted()) {
     } else {
       //räkna handen
@@ -436,6 +458,7 @@ function allPlayersBusted() {
 //kolla vilka som vinner
 function checkWin() {
   if (!alreadyExecuted) {
+    hideHitNStand();
     alreadyExecuted = true;
     var countList = [];
     //för varje spelare
